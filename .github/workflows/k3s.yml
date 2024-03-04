@@ -25,5 +25,5 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: Check Python version
-        run: python3 --version
+      - name: Install ansible
+        run: pip3 install ansible-core
