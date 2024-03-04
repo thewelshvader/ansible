@@ -1,0 +1,10 @@
+---
+- name: Install k3s on single node
+  hosts: localhost
+  gather_facts: true
+  vars:
+    ansible_user: kevin
+  tasks:
+    - name: Debug facts
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts }}"

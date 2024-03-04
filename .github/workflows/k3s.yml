@@ -1,0 +1,33 @@
+name: Ansible - Install k3s
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+env:
+  GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
+jobs:
+  manage_vm:
+    name: Ansible - Install k3s
+    strategy:
+      matrix:
+         folder: [k3s]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Check runner
+        run: sudo apt-get update -y
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install ansible
+        run: pip3 install ansible-core
+      - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
+      - name: Add private key
+        run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
