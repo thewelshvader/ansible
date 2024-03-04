@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - kd-ansible-init
+      - main
 env:
   GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
 jobs:
