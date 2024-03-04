@@ -5,7 +5,8 @@ on:
   push:
     branches:
       - kd-ansible-init
-
+env:
+  GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
 jobs:
   manage_vm:
     name: Ansible - Install k3s
@@ -27,3 +28,6 @@ jobs:
       
       - name: Install ansible
         run: pip3 install ansible-core
+      
+      - name: Add private key
+        run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
