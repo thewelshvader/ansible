@@ -6,7 +6,7 @@ on:
     branches:
       - main
 env:
-  # GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
+  GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
   AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
   AZ_SUB_ID: ${{ secrets.AZ_SUB_ID }}
   AZ_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
@@ -34,20 +34,24 @@ jobs:
         run: pip install ansible[azure]
       - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
       - name: Add private key
-        run: echo ${{ secrets.GDALE_PRIVATE_KEY }} > ~/.ssh/gdale-rancher-vm1
+        run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      - name: Check SSH key
-        run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
-        # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
-      - name: Check ansible version
-        run: ansible --version
-      - name: Install Azure pre-req list
-        run: pip install --upgrade -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
-      - name: Install ansible collections
-        run: ansible-galaxy collection install azure.azcollection
-      - name: Check permissions
-        run: ls -al ~/.ssh
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ~/.ssh/gdale-rancher-vm1
+      # - name: Check SSH key
+      #   run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
+      #   # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
+      # - name: Check ansible version
+      #   run: ansible --version
+      # - name: Install Azure pre-req list
+      #   run: pip install --upgrade -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
+      # - name: Install ansible collections
+      #   run: ansible-galaxy collection install azure.azcollection
+      # - name: Check permissions
+      #   run: ls -al ~/.ssh
       # - name: Run playbook
       #   working-directory: k3s
       #   run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1 -vv
