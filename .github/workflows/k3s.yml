@@ -44,9 +44,6 @@ jobs:
 
       - name: Install ansible collections
         run: ansible-galaxy collection install azure.azcollection --force
-      
-      - name: Find file
-        run: sudo find / iname requirements-azure.txt
 
       - name: Install Azure pre-req list
         run: pip install -r /home/runner/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
