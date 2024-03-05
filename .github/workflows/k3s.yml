@@ -49,7 +49,7 @@ jobs:
         run: sudo find / iname requirements-azure.txt
 
       - name: Install Azure pre-req list
-        run: pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+        run: pip install -r /home/runner/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
 
       # - name: Run playbook
       #   working-directory: k3s
