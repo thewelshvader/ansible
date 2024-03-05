@@ -37,8 +37,8 @@ jobs:
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      - name: Set permissions on private key
-        run: echo $GDALE_PRIVATE_KEY
+      - name: Add SSH key
+        run: ssh-add ~/.ssh/gdale-rancher-vm1
       - name: Check ansible version
         run: ansible --version
       - name: Install Azure pre-req list
@@ -47,6 +47,6 @@ jobs:
         run: ansible-galaxy collection install azure.azcollection
       - name: Check permissions
         run: ls -al ~/.ssh
-      - name: Run playbook
-        working-directory: k3s
-        run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1 -vv
+      # - name: Run playbook
+      #   working-directory: k3s
+      #   run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1 -vv
