@@ -7,6 +7,9 @@
     public_nic: gdale-rancher-vm1-publicip1
     rsg: rsg-rancher
   tasks:
+    - name: Check key
+      command: ssh-add -l
+      
     - name: Get public ip info by name
       azure.azcollection.azure_rm_publicipaddress_info:
         resource_group: "{{ rsg }}"
