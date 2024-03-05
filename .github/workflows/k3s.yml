@@ -29,19 +29,24 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      
-      - name: Install ansible
-        run: pip install ansible[azure]
-      - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
-      - name: Add private key
-        run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
-      - name: Set permissions on private key
-        run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      - name: Upload a single artifact
-        uses: actions/upload-artifact@v4
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          name: gdale-rancher-vm1
-          path: ~/.ssh/gdale-rancher-vm1
+          ssh-private-key: ${{ secrets.GDALE_PRIVATE_KEY }}
+
+      # - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
+      # - name: Add private key
+      #   run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
+      # - name: Set permissions on private key
+      #   run: chmod 0600 ~/.ssh/gdale-rancher-vm1
+      # - name: Install ansible
+      #   run: pip install ansible[azure]
+      # - name: Upload a single artifact
+        # uses: actions/upload-artifact@v4
+        # with:
+        #   name: gdale-rancher-vm1
+        #   path: ~/.ssh/gdale-rancher-vm1
       # - name: Check SSH key
       #   run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
       #   # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
