@@ -6,7 +6,7 @@ on:
     branches:
       - main
 env:
-  GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
+  # GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
   AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
   AZ_SUB_ID: ${{ secrets.AZ_SUB_ID }}
   AZ_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
@@ -34,7 +34,7 @@ jobs:
         run: pip install ansible[azure]
       - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
       - name: Add private key
-        run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
+        run: echo ${{ secrets.GDALE_PRIVATE_KEY }} > ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
       - name: Check SSH key
