@@ -28,10 +28,9 @@ jobs:
           python3 --version
           pip3 --version
 
-      # - name: Set up Python environment
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.10'
+      - name: Install ansible
+        run: pip install ansible[azure]
+
 
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -40,6 +39,12 @@ jobs:
 
       - name: List keys
         run: ssh-add -l
+
+      # - name: Set up Python environment
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.10'
+
       # - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
       # - name: Add private key
       #   run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
