@@ -34,8 +34,8 @@ jobs:
       - name: Check ansible version
         run: ansible --version
       - name: Install Azure pre-req list
-        run: find / -iname requirements-azure.txt
+        run: sudo find / -iname requirements-azure.txt
         # run: pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
-      - name: Run playbook
-        working-directory: k3s
-        run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1
+      # - name: Run playbook
+      #   working-directory: k3s
+      #   run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1
