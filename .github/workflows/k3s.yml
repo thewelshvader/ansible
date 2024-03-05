@@ -38,7 +38,7 @@ jobs:
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
-        run: cat ~/.ssh/gdale-rancher-vm1
+        run: echo $GDALE_PRIVATE_KEY
       - name: Check ansible version
         run: ansible --version
       - name: Install Azure pre-req list
