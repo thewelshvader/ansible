@@ -37,8 +37,9 @@ jobs:
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      - name: Add SSH key
-        run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
+      - name: Check SSH key
+        run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
+        # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
       - name: Check ansible version
         run: ansible --version
       - name: Install Azure pre-req list
