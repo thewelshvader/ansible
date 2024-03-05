@@ -1,10 +1,31 @@
 ---
 - name: Install k3s on single node
   hosts: localhost
-  gather_facts: true
+  gather_facts: false
   vars:
     ansible_user: kevin
+    public_nic: gdale-rancher-vm1-publicip1
+    rsg: rsg-rancher
   tasks:
+    - name: Get VM info by name
+      azure.azcollection.azure_rm_publicipaddress_info:
+        resource_group: "{{ rsg }}"
+        name: "{{ public_nic }}"
+        cert_validation_mode: validate
+        client_id: "{{ lookup('ansible.builtin.env', 'AZ_CLIENT_ID') }}"
+        subscription_id: "{{ lookup('ansible.builtin.env', 'AZ_SUB_ID') }}"
+        tenant: "{{ lookup('ansible.builtin.env', 'AZ_TENANT_ID') }}"
+        secret: "{{ lookup('ansible.builtin.env', 'AZ_SECRET') }}"
+      register: az_vm_info
+
+    - name: Add host
+      ansible.builtin.add_host:
+        name: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+
+    - name: Gather VM facts
+      ansible.builtin.setup:
+      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+
     - name: Debug facts
       ansible.builtin.debug:
         msg: "{{ ansible_facts }}"
