@@ -39,9 +39,13 @@ jobs:
       - name: Install ansible
         run: pip install ansible[azure]
 
-      - name: Run playbook
-        working-directory: k3s
-        run: ansible-playbook install_k3s.yml -vvv #--private-key ~/.ssh/gdale-rancher-vm1
+      - name: Check ansible version
+        run: ansible --version
+
+      # - name: Run playbook
+      #   working-directory: k3s
+      #   run: ansible-playbook install_k3s.yml -vvv #--private-key ~/.ssh/gdale-rancher-vm1
+
 
 
       # - name: Set up Python environment
@@ -64,8 +68,7 @@ jobs:
       # - name: Check SSH key
       #   run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
       #   # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
-      # - name: Check ansible version
-      #   run: ansible --version
+
       # - name: Install Azure pre-req list
       #   run: pip install --upgrade -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
       # - name: Install ansible collections
