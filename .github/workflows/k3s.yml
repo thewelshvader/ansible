@@ -7,6 +7,10 @@ on:
       - main
 env:
   GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
+  AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+  AZ_SUB_ID: ${{ secrets.AZ_SUB_ID }}
+  AZ_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+  AZ_SECRET: ${{ secrets.AZ_SECRET }}
 jobs:
   manage_vm:
     name: Ansible - Install k3s
