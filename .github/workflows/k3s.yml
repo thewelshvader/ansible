@@ -51,34 +51,4 @@ jobs:
 
       - name: Run playbook
         working-directory: k3s
-        run: ansible-playbook install_k3s.yml -vvv #--private-key ~/.ssh/gdale-rancher-vm1
-
-
-
-      # - name: Set up Python environment
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.10'
-
-      # - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
-      # - name: Add private key
-      #   run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
-      # - name: Set permissions on private key
-      #   run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      # - name: Install ansible
-      #   run: pip install ansible[azure]
-      # - name: Upload a single artifact
-        # uses: actions/upload-artifact@v4
-        # with:
-        #   name: gdale-rancher-vm1
-        #   path: ~/.ssh/gdale-rancher-vm1
-      # - name: Check SSH key
-      #   run: ssh-keygen -l -f ~/.ssh/gdale-rancher-vm1
-      #   # run: eval $(ssh-agent -s) && ssh-add ~/.ssh/gdale-rancher-vm1
-
-      # - name: Install Azure pre-req list
-      #   run: pip install --upgrade -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
-
-      # - name: Run playbook
-      #   working-directory: k3s
-      #   run: ansible-playbook install_k3s.yml -vvv --private-key ~/.ssh/gdale-rancher-vm1
+        run: ansible-playbook install_k3s.yml
