@@ -37,8 +37,8 @@ jobs:
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Set permissions on private key
         run: chmod 0600 ~/.ssh/gdale-rancher-vm1
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
+      - name: Upload a single artifact
+        uses: actions/upload-artifact@v4
         with:
           name: ~/.ssh/gdale-rancher-vm1
       # - name: Check SSH key
