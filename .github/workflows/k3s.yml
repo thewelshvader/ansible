@@ -32,4 +32,5 @@ jobs:
       - name: Add private key
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Run playbook
+        working-directory: k3s
         run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1
