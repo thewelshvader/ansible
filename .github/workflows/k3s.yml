@@ -60,4 +60,4 @@ jobs:
         run: ansible-galaxy collection install azure.azcollection
       - name: Run playbook
         working-directory: k3s
-        run: ansible-playbook install_k3s.yml #--private-key ~/.ssh/gdale-rancher-vm1 -vv
+        run: ansible-playbook install_k3s.yml -vvv #--private-key ~/.ssh/gdale-rancher-vm1
