@@ -33,6 +33,8 @@ jobs:
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Check ansible version
         run: ansible --version
+      - name: Install Azure pre-req list
+        run: pip3 install -r ~/runner/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
       - name: Run playbook
         working-directory: k3s
         run: ansible-playbook install_k3s.yml --private-key ~/.ssh/gdale-rancher-vm1
