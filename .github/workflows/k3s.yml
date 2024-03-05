@@ -27,14 +27,14 @@ jobs:
           python-version: '3.10'
       
       - name: Install ansible
-        run: pip3 install ansible-core
+        run: pip install ansible-core
       - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
       - name: Add private key
         run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
       - name: Check ansible version
         run: ansible --version
       - name: Install Azure pre-req list
-        run: pip3 install --upgrade -v -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
+        run: pip install --upgrade -v -t /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages -r /opt/pipx/venvs/ansible-core/lib/python3.10/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt
       - name: Install ansible collections
         run: ansible-galaxy collection install azure.azcollection
       - name: Run playbook
