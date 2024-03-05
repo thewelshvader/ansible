@@ -35,6 +35,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GDALE_PRIVATE_KEY }}
 
+      - name: List keys
+        run: ssh-add -l
       # - run: mkdir ~/.ssh && touch ~/.ssh/gdale-rancher-vm1
       # - name: Add private key
       #   run: echo $GDALE_PRIVATE_KEY > ~/.ssh/gdale-rancher-vm1
@@ -58,6 +60,6 @@ jobs:
         run: ansible-galaxy collection install azure.azcollection
       - name: Check permissions
         run: ls -al ~/.ssh
-      - name: Run playbook
-        working-directory: k3s
-        run: ansible-playbook install_k3s.yml #--private-key ~/.ssh/gdale-rancher-vm1 -vv
+      # - name: Run playbook
+      #   working-directory: k3s
+      #   run: ansible-playbook install_k3s.yml #--private-key ~/.ssh/gdale-rancher-vm1 -vv
