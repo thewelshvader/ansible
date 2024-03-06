@@ -6,6 +6,7 @@
     ansible_user: kevin
     public_nic: gdale-rancher-vm1-publicip1
     rsg: rsg-rancher
+    k3s_version: "v1.28.7+k3s1"
   tasks:
     - name: Check key
       command: ssh-add -l
@@ -45,3 +46,10 @@
             owner: root
             group: root
             mode: 0755
+        
+        - name: Download K3s binary
+          ansible.builtin.command:
+            cmd: /usr/local/bin/k3s-install.sh
+          environment:
+            INSTALL_K3S_VERSION: "{{ k3s_version }}"
+          changed_when: true
