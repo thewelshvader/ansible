@@ -45,9 +45,16 @@
           kubernetes.core.helm_repository:
             name: stable
             repo_url: "https://releases.rancher.com/server-charts/latest"
+
+        - name: Download pip script
+          ansible.builtin.get_url:
+            url: https://bootstrap.pypa.io/get-pip.py
+            dest: /usr/local/bin/get-pip.py
+            mode: '0700'
         
         - name: Install pip
-          ansible.builtin.command: python3 -m ensurepip
+          ansible.builtin.command: /usr/local/bin/get-pip.py
+          register: pip_install
 
         - name: Install Python packages
           ansible.builtin.pip:
