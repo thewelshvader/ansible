@@ -35,3 +35,11 @@
             url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
             dest: /usr/local/bin/get_helm.sh
             mode: '0700'
+        
+        - name: Install Helm
+          ansible.builtin.command: /usr/local/bin/get_helm.sh
+          register: helm_install
+        
+        - name: Debug Helm Install
+          debug:
+            msg: "{{ helm_install }}"
