@@ -53,7 +53,7 @@
             mode: '0700'
         
         - name: Install pip
-          ansible.builtin.command: /usr/local/bin/get-pip.py
+          ansible.builtin.command: python3 /usr/local/bin/get-pip.py
           register: pip_install
 
         - name: Install Python packages
