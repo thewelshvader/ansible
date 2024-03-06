@@ -35,6 +35,9 @@ jobs:
 
       - name: List keys
         run: ssh-add -l
+      
+      - name: Install Python required modules
+        run: pip install kubernetes jsonpatch PyYAML
 
       - name: Install ansible
         run: pip install ansible[azure]
