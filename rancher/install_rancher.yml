@@ -1,0 +1,33 @@
+---
+- name: Install Rancher
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Get public ip info by name
+      azure.azcollection.azure_rm_publicipaddress_info:
+        resource_group: "{{ rsg }}"
+        name: "{{ public_nic }}"
+        cert_validation_mode: validate
+        client_id: "{{ lookup('ansible.builtin.env', 'AZ_CLIENT_ID') }}"
+        subscription_id: "{{ lookup('ansible.builtin.env', 'AZ_SUB_ID') }}"
+        tenant: "{{ lookup('ansible.builtin.env', 'AZ_TENANT_ID') }}"
+        secret: "{{ lookup('ansible.builtin.env', 'AZ_SECRET') }}"
+      register: az_vm_info
+
+    - name: Add host
+      ansible.builtin.add_host:
+        name: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+
+    - name: Gather VM facts
+      ansible.builtin.setup:
+      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+    
+    - name: Configure Rancher
+      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+      become: true
+      block:
+        - name: Download Helm script
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+            dest: /usr/local/bin/get_helm.sh
+            mode: '0700'

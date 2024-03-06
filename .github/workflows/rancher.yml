@@ -1,0 +1,53 @@
+name: Ansible - Install Rancher
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Ansible - Install k3s]
+    types:
+      - completed
+env:
+  GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
+  AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+  AZ_SUB_ID: ${{ secrets.AZ_SUB_ID }}
+  AZ_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+  AZ_SECRET: ${{ secrets.AZ_SECRET }}
+  ANSIBLE_HOST_KEY_CHECKING: False
+jobs:
+  manage_vm:
+    name: Ansible - Install Rancher
+    strategy:
+      matrix:
+         folder: [rancher]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Check runner
+        run: |
+          sudo apt-get update -y
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.GDALE_PRIVATE_KEY }}
+
+      - name: List keys
+        run: ssh-add -l
+
+      - name: Install ansible
+        run: pip install ansible[azure]
+
+      - name: Check ansible version
+        run: ansible --version
+
+      - name: Install ansible collections
+        run: ansible-galaxy collection install azure.azcollection --force
+
+      - name: Install Azure pre-req list
+        run: pip install -r /home/runner/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+
+      - name: Run playbook
+        working-directory: rancher
+        run: ansible-playbook install_rancher.yml
