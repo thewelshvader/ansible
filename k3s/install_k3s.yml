@@ -32,3 +32,7 @@
     - name: Debug facts
       ansible.builtin.debug:
         msg: "{{ ansible_facts }}"
+    
+    - name: Disable UFW
+      community.general.ufw:
+        state: disabled

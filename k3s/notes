@@ -1,0 +1,30 @@
+Setting up k3s:
+
+
+Disable firewall
+sudo ufw Disable
+
+
+Install k3s
+curl -sfL https://get.k3s.io |  INSTALL_K3S_VERSION=v1.28.7+k3s1 sh -s - server
+
+
+Install rancher:
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+
+kubectl create namespace cattle-system
+
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/<VERSION>/cert-manager.crds.yaml
+
+helm repo add jetstack https://charts.jetstack.io
+
+helm repo update
+
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace
+
+# Windows Powershell
+helm install cert-manager jetstack/cert-manager `
+  --namespace cert-manager `
+  --create-namespace
