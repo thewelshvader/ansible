@@ -36,3 +36,17 @@
     - name: Disable UFW
       community.general.ufw:
         state: disabled
+      become: true
+      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+
+    - name: Download K3s install script
+      when: airgap_dir is undefined
+      ansible.builtin.get_url:
+        url: https://get.k3s.io/
+        timeout: 120
+        dest: /usr/local/bin/k3s-install.sh
+        owner: root
+        group: root
+        mode: 0755
+      become: true
+      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
