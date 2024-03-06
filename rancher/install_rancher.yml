@@ -40,6 +40,7 @@
           ansible.builtin.command: /usr/local/bin/get_helm.sh
           register: helm_install
         
-        - name: Debug Helm Install
-          debug:
-            msg: "{{ helm_install }}"
+        - name: Add Rancher chart repo
+          kubernetes.core.helm_repository:
+            name: stable
+            repo_url: "https://releases.rancher.com/server-charts/latest"
