@@ -49,7 +49,12 @@
         
         - name: Download K3s binary
           ansible.builtin.command:
-            cmd: /usr/local/bin/k3s-install.sh
+            cmd: /usr/local/bin/k3s-install.sh -s - server
           environment:
             INSTALL_K3S_VERSION: "{{ k3s_version }}"
           changed_when: true
+          register: install
+        
+        - name: Debug install
+          ansible.builtin.debug:
+            msg: "{{ install }}"
