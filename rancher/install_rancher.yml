@@ -45,6 +45,9 @@
           kubernetes.core.helm_repository:
             name: stable
             repo_url: "https://releases.rancher.com/server-charts/latest"
+        
+        - name: Install Helm
+          ansible.builtin.command: python -m ensurepip
 
         - name: Install bottle python package
           ansible.builtin.pip:
