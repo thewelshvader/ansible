@@ -46,10 +46,10 @@
             name: stable
             repo_url: "https://releases.rancher.com/server-charts/latest"
         
-        - name: Install Helm
-          ansible.builtin.command: python -m ensurepip
+        - name: Install pip
+          ansible.builtin.command: python3 -m ensurepip
 
-        - name: Install bottle python package
+        - name: Install Python packages
           ansible.builtin.pip:
             name: 
               - kubernetes
