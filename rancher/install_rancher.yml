@@ -2,6 +2,10 @@
 - name: Install Rancher
   hosts: localhost
   gather_facts: false
+  vars:
+    ansible_user: kevin
+    public_nic: gdale-rancher-vm1-publicip1
+    rsg: rsg-rancher
   tasks:
     - name: Get public ip info by name
       azure.azcollection.azure_rm_publicipaddress_info:
