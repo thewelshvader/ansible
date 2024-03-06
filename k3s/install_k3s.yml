@@ -28,25 +28,20 @@
     - name: Gather VM facts
       ansible.builtin.setup:
       delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
-
-    - name: Debug facts
-      ansible.builtin.debug:
-        msg: "{{ ansible_facts }}"
     
-    - name: Disable UFW
-      community.general.ufw:
-        state: disabled
-      become: true
+    - name: Configure k3s
       delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+      become: true
+      block:
+        - name: Disable UFW
+          community.general.ufw:
+            state: disabled
 
-    - name: Download K3s install script
-      when: airgap_dir is undefined
-      ansible.builtin.get_url:
-        url: https://get.k3s.io/
-        timeout: 120
-        dest: /usr/local/bin/k3s-install.sh
-        owner: root
-        group: root
-        mode: 0755
-      become: true
-      delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
+        - name: Download k3s install script
+          ansible.builtin.get_url:
+            url: https://get.k3s.io/
+            timeout: 120
+            dest: /usr/local/bin/k3s-install.sh
+            owner: root
+            group: root
+            mode: 0755
