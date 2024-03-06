@@ -29,6 +29,7 @@
     - name: Configure Rancher
       delegate_to: "{{ az_vm_info.publicipaddresses[0].ip_address }}"
       become: true
+      become_user: root
       block:
         - name: Download Helm script
           ansible.builtin.get_url:
@@ -44,7 +45,14 @@
           kubernetes.core.helm_repository:
             name: stable
             repo_url: "https://releases.rancher.com/server-charts/latest"
-        
+
+        - name: Install bottle python package
+          ansible.builtin.pip:
+            name: 
+              - kubernetes
+              - jsonpatch
+              - PyYAML
+
         - name: Create root namespace
           kubernetes.core.k8s:
             name: cattle-system
