@@ -86,4 +86,7 @@
         
         - name: Refresh Helm cache
           kubernetes.core.helm:
+            name: placeholder
+            namespace: kube-system
+            state: absent
             update_repo_cache: true
