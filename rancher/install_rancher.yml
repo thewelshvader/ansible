@@ -88,5 +88,6 @@
           kubernetes.core.helm:
             name: placeholder
             namespace: kube-system
+            kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: absent
             update_repo_cache: true
