@@ -43,7 +43,7 @@
         
         - name: Add Rancher chart repo
           kubernetes.core.helm_repository:
-            name: stable
+            name: rancher-latest
             repo_url: "https://releases.rancher.com/server-charts/latest"
 
         - name: Download pip script
