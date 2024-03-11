@@ -6,7 +6,7 @@
     ansible_user: kevin
     public_nic: gdale-rancher-vm1-publicip1
     rsg: rsg-rancher
-    k3s_version: "v1.28.7+k3s1"
+    k3s_version: "v1.27.11+k3s1"
   tasks:
     - name: Check key
       command: ssh-add -l
