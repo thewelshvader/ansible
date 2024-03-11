@@ -103,6 +103,7 @@
             namespace: cattle-system
             kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: present
+            update_repo_cache: True
             values:
               hostname: "{{ az_vm_info.publicipaddresses[0].ip_address }}.greendale.io"
               replicas: 1
