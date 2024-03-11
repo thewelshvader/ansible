@@ -7,6 +7,7 @@ on:
     types:
       - completed
 env:
+  RANCHER_ADMIN: ${{ secrets.RANCHER_ADMIN }}
   GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
   AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
   AZ_SUB_ID: ${{ secrets.AZ_SUB_ID }}

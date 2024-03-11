@@ -94,3 +94,16 @@
             kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: present
             update_repo_cache: true
+        
+        - name: Install Rancher
+          kubernetes.core.helm:
+            name: rancher
+            chart_ref: rancher-latest/rancher
+            release_name: rancher
+            namespace: cattle-system
+            kubeconfig: /etc/rancher/k3s/k3s.yaml
+            state: present
+            values:
+              hostname: "{{ az_vm_info.publicipaddresses[0].ip_address }}.greendale.io"
+              replicas: 1
+              bootstrapPassword: "{{ lookup('ansible.builtin.env', 'RANCHER_ADMIN') }}"
