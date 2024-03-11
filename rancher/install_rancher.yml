@@ -90,7 +90,6 @@
             chart_ref: jetstack/cert-manager
             create_namespace: true
             release_name: cert-manager
-            release_namespace: cert-manager
             namespace: cert-manager
             kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: present
