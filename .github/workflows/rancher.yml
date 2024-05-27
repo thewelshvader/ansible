@@ -2,10 +2,10 @@ name: Ansible - Install Rancher
 
 on:
   workflow_dispatch:
-  # workflow_run:
-  #   workflows: [Ansible - Install k3s]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [Ansible - Install k3s]
+    types:
+      - completed
 env:
   RANCHER_ADMIN: ${{ secrets.RANCHER_ADMIN }}
   GDALE_PRIVATE_KEY: ${{ secrets.GDALE_PRIVATE_KEY }}
