@@ -5,13 +5,13 @@
   community.general.ufw:
     state: disabled
 
-# - name: Download k3s install script
-#   ansible.builtin.uri:
-#     url: https://get.k3s.io
-#     dest: /home/ubuntu/install.sh
-#     mode: "744"
-#     owner: ubuntu
-#     group: ubuntu
+- name: Download k3s install script
+  ansible.builtin.uri:
+    url: https://get.k3s.io
+    dest: /home/kevin/install.sh
+    mode: "744"
+    owner: kevin
+    group: kevin
 
 # - name: Created k3s config directory
 #   ansible.builtin.file:
