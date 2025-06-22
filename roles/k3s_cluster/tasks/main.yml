@@ -1,12 +1,5 @@
 ---
 # tasks file for roles/k3s_cluster
-- name: Install the community.general collection
-  shell: "ansible-galaxy collection install community.general"
-  register: install_result
-  changed_when: "'installed' in install_result.stdout"
-  delegate_to: localhost
-  run_once: true
-
 - name: Disable UFW
   community.general.ufw:
     state: disabled
