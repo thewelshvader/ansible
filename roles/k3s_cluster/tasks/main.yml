@@ -4,246 +4,219 @@
   community.general.ufw:
     state: disabled
 
-- name: Add dns entries to local hosts
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    insertbefore: BOF
-    line: "{{ item }}"
-  loop: "{{ hosts_entries }}"
+# - name: Download k3s install script
+#   ansible.builtin.uri:
+#     url: https://get.k3s.io
+#     dest: /home/ubuntu/install.sh
+#     mode: "744"
+#     owner: ubuntu
+#     group: ubuntu
 
-- name: Download k3s install script
-  ansible.builtin.uri:
-    url: https://get.k3s.io
-    dest: /home/ubuntu/install.sh
-    mode: "744"
-    owner: ubuntu
-    group: ubuntu
+# - name: Created k3s config directory
+#   ansible.builtin.file:
+#     path: /etc/rancher/k3s/
+#     state: directory
 
-- name: Created k3s config directory
-  ansible.builtin.file:
-    path: /etc/rancher/k3s/
-    state: directory
+# - name: Copy k3s master config file
+#   ansible.builtin.copy:
+#     src: master-config.yaml
+#     dest: /etc/rancher/k3s/config.yaml
+#     owner: ubuntu
+#     group: ubuntu
+#     mode: '0644'
+#   when: inventory_hostname in groups["k3s_master"]
 
-- name: Copy k3s master config file
-  ansible.builtin.copy:
-    src: master-config.yaml
-    dest: /etc/rancher/k3s/config.yaml
-    owner: ubuntu
-    group: ubuntu
-    mode: '0644'
-  when: inventory_hostname in groups["k3s_master"]
+# - name: Template server config file
+#   ansible.builtin.template:
+#     src: servers.j2
+#     dest: /etc/rancher/k3s/config.yaml
+#     owner: ubuntu
+#     group: ubuntu
+#     mode: '0644'
+#   when: inventory_hostname in groups["k3s_servers"]
 
-- name: Template server config file
-  ansible.builtin.template:
-    src: servers.j2
-    dest: /etc/rancher/k3s/config.yaml
-    owner: ubuntu
-    group: ubuntu
-    mode: '0644'
-  when: inventory_hostname in groups["k3s_servers"]
+# - name: Template agent config file
+#   ansible.builtin.template:
+#     src: agents.j2
+#     dest: /etc/rancher/k3s/config.yaml
+#     owner: ubuntu
+#     group: ubuntu
+#     mode: '0644'
+#   when: inventory_hostname in groups["k3s_agents"]
 
-- name: Template agent config file
-  ansible.builtin.template:
-    src: agents.j2
-    dest: /etc/rancher/k3s/config.yaml
-    owner: ubuntu
-    group: ubuntu
-    mode: '0644'
-  when: inventory_hostname in groups["k3s_agents"]
+# - name: Download Docker install script
+#   ansible.builtin.get_url:
+#     url: "https://releases.rancher.com/install-docker/{{ docker_version }}.sh"
+#     timeout: 120
+#     dest: "/home/ubuntu/docker-{{ docker_version }}-install.sh"
+#     owner: ubuntu
+#     group: ubuntu
+#     mode: '0755'
 
-- name: Download Docker install script
-  ansible.builtin.get_url:
-    url: "https://releases.rancher.com/install-docker/{{ docker_version }}.sh"
-    timeout: 120
-    dest: "/home/ubuntu/docker-{{ docker_version }}-install.sh"
-    owner: ubuntu
-    group: ubuntu
-    mode: '0755'
+# - name: "Install Docker - version {{ docker_version }}"
+#   ansible.builtin.command:
+#     cmd: "/home/ubuntu/docker-{{ docker_version }}-install.sh"
+#   changed_when: true
+#   register: docker_install_output
 
-- name: "Install Docker - version {{ docker_version }}"
-  ansible.builtin.command:
-    cmd: "/home/ubuntu/docker-{{ docker_version }}-install.sh"
-  changed_when: true
-  register: docker_install_output
+# - name: Ensure docker group exists
+#   ansible.builtin.group:
+#     name: docker
+#     state: present
 
-- name: Ensure docker group exists
-  ansible.builtin.group:
-    name: docker
-    state: present
+# - name: Add ubuntu user to docker group
+#   ansible.builtin.user:
+#     name: ubuntu
+#     groups: docker
 
-- name: Add ubuntu user to docker group
-  ansible.builtin.user:
-    name: ubuntu
-    groups: docker
-
-- name: Install K3s - master
-  ansible.builtin.command:
-    cmd: /home/ubuntu/install.sh
-  environment:
-    INSTALL_K3S_VERSION: "{{ k3s_version }}"
-  when: inventory_hostname in groups["k3s_master"]
-
-- name: Replace kubeconfig default IP to the instance internal IP
-  ansible.builtin.replace:
-    path: /etc/rancher/k3s/k3s.yaml
-    regexp: ^[\s]+server:\shttps:\/\/127.0.0.1:6443$
-    replace: "    server: https://{{ inventory_hostname }}:6443"
-  when: inventory_hostname in groups["k3s_master"]
+# - name: Install K3s - master
+#   ansible.builtin.command:
+#     cmd: /home/ubuntu/install.sh
+#   environment:
+#     INSTALL_K3S_VERSION: "{{ k3s_version }}"
+#   when: inventory_hostname in groups["k3s_master"]
 
 # - name: Replace kubeconfig default IP to the instance internal IP
-#   ansible.builtin.shell:
-#     cmd: |
-#       'sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"{{ inventory_hostname }}"'\2/' /etc/rancher/k3s/k3s.yaml'
-#       #sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"$(ip -4 address show ens3 | grep -o '10\.[0-9.]*' | head -1)"'\2/' /etc/rancher/k3s/k3s.yaml
+#   ansible.builtin.replace:
+#     path: /etc/rancher/k3s/k3s.yaml
+#     regexp: ^[\s]+server:\shttps:\/\/127.0.0.1:6443$
+#     replace: "    server: https://{{ inventory_hostname }}:6443"
 #   when: inventory_hostname in groups["k3s_master"]
 
-- name: Install K3s - servers
-  ansible.builtin.command:
-    cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
-  environment:
-    INSTALL_K3S_VERSION: "{{ k3s_version }}"
-  changed_when: true
-  when: inventory_hostname in groups["k3s_servers"]
+# # - name: Replace kubeconfig default IP to the instance internal IP
+# #   ansible.builtin.shell:
+# #     cmd: |
+# #       'sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"{{ inventory_hostname }}"'\2/' /etc/rancher/k3s/k3s.yaml'
+# #       #sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"$(ip -4 address show ens3 | grep -o '10\.[0-9.]*' | head -1)"'\2/' /etc/rancher/k3s/k3s.yaml
+# #   when: inventory_hostname in groups["k3s_master"]
+
+# - name: Install K3s - servers
+#   ansible.builtin.command:
+#     cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
+#   environment:
+#     INSTALL_K3S_VERSION: "{{ k3s_version }}"
+#   changed_when: true
+#   when: inventory_hostname in groups["k3s_servers"]
 
 
-- name: Install K3s - agents
-  ansible.builtin.command:
-    cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
-  environment:
-    INSTALL_K3S_VERSION: "{{ k3s_version }}"
-    INSTALL_K3S_EXEC: agent
-    K3S_TOKEN: secret
-    K3S_URL: "https://{{ groups.k3s_master[0] }}"
-  changed_when: true
-  when: inventory_hostname in groups["k3s_agents"]
+# - name: Install K3s - agents
+#   ansible.builtin.command:
+#     cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
+#   environment:
+#     INSTALL_K3S_VERSION: "{{ k3s_version }}"
+#     INSTALL_K3S_EXEC: agent
+#     K3S_TOKEN: secret
+#     K3S_URL: "https://{{ groups.k3s_master[0] }}"
+#   changed_when: true
+#   when: inventory_hostname in groups["k3s_agents"]
 
-- name: Post install block - master
-  block:
-    - name: Install pip
-      ansible.builtin.apt:
-        name: python3-pip
-        update_cache: true
-      become: true
-
-    - name: Setup pip
-      ansible.builtin.pip:
-        name: kubernetes
-
-    - name: K8s info
-      kubernetes.core.k8s_info:
-        kind: Node
-        label_selectors:
-          - "k3s=agent"
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-      register: info
-
-    - name: Extract hostnames from agents
-      ansible.builtin.set_fact:
-        agent_hostnames: "{{ info | json_query(query) }}"
-      vars:
-        query: resources[].metadata.name
-
-    - name: Add node label to agents
-      kubernetes.core.k8s:
-        state: present
-        kind: node
-        name: "{{ item }}"
-        definition:
-          metadata:
-            labels:
-              node-role.kubernetes.io/worker: 'true'
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-      loop: "{{ agent_hostnames }}"
-  when: inventory_hostname in groups["k3s_master"]
-
-# - name: DNS Config
+# - name: Post install block - master
 #   block:
-#     - name: Update coredns config
+#     - name: Install pip
+#       ansible.builtin.apt:
+#         name: python3-pip
+#         update_cache: true
+#       become: true
+
+#     - name: Setup pip
+#       ansible.builtin.pip:
+#         name: kubernetes
+
+#     - name: K8s info
+#       kubernetes.core.k8s_info:
+#         kind: Node
+#         label_selectors:
+#           - "k3s=agent"
+#         kubeconfig: /etc/rancher/k3s/k3s.yaml
+#       register: info
+
+#     - name: Extract hostnames from agents
+#       ansible.builtin.set_fact:
+#         agent_hostnames: "{{ info | json_query(query) }}"
+#       vars:
+#         query: resources[].metadata.name
+
+#     - name: Add node label to agents
 #       kubernetes.core.k8s:
 #         state: present
+#         kind: node
+#         name: "{{ item }}"
 #         definition:
-#           apiVersion: v1
-#           kind: ConfigMap
 #           metadata:
-#             name: coredns
-#             namespace: kube-system
-#           data:
-#             Corefile: "{{ coredns }}"
+#             labels:
+#               node-role.kubernetes.io/worker: 'true'
 #         kubeconfig: /etc/rancher/k3s/k3s.yaml
-
-#     - name: Restart coredns
-#       ansible.builtin.shell: kubectl rollout restart deployment/coredns -n kube-system
+#       loop: "{{ agent_hostnames }}"
 #   when: inventory_hostname in groups["k3s_master"]
 
-- name: Configure Rancher
-  delegate_to: localhost
-  block:
-    - name: List current Rancher clusters
-      ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
-        force_basic_auth: true
-        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-        method: GET
-        body_format: json
-        status_code: 200
-      register: current_clusters
+# - name: Configure Rancher
+#   delegate_to: localhost
+#   block:
+#     - name: List current Rancher clusters
+#       ansible.builtin.uri:
+#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
+#         force_basic_auth: true
+#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+#         method: GET
+#         body_format: json
+#         status_code: 200
+#       register: current_clusters
     
-    - name: Set fact
-      ansible.builtin.set_fact:
-        current_cluster_list: "{{ current_clusters.json.data | map(attribute='name') | list }}"
+#     - name: Set fact
+#       ansible.builtin.set_fact:
+#         current_cluster_list: "{{ current_clusters.json.data | map(attribute='name') | list }}"
 
-    - name: Debug cluster list
-      ansible.builtin.debug:
-        msg: "{{ current_cluster_list }}"
+#     - name: Debug cluster list
+#       ansible.builtin.debug:
+#         msg: "{{ current_cluster_list }}"
 
-    - name: Create Rancher cluster
-      ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
-        force_basic_auth: true
-        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-        method: POST
-        body_format: json
-        body:
-          name: "{{ awx_inventory_name | lower }}"
-        status_code: 201
-      register: new_cluster
-      when: awx_inventory_name|lower not in current_cluster_list
+#     - name: Create Rancher cluster
+#       ansible.builtin.uri:
+#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
+#         force_basic_auth: true
+#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+#         method: POST
+#         body_format: json
+#         body:
+#           name: "{{ awx_inventory_name | lower }}"
+#         status_code: 201
+#       register: new_cluster
+#       when: awx_inventory_name|lower not in current_cluster_list
 
-    - name: Debug new cluster id
-      ansible.builtin.debug:
-        msg: "New cluster id: {{ new_cluster.json.id }}"
-      when: awx_inventory_name|lower not in current_cluster_list
+#     - name: Debug new cluster id
+#       ansible.builtin.debug:
+#         msg: "New cluster id: {{ new_cluster.json.id }}"
+#       when: awx_inventory_name|lower not in current_cluster_list
 
-    - name: Pause for 1 minute
-      ansible.builtin.pause:
-        minutes: 1
-      when: new_cluster is not skipped
+#     - name: Pause for 1 minute
+#       ansible.builtin.pause:
+#         minutes: 1
+#       when: new_cluster is not skipped
   
-    - name: Get new cluster tokens
-      ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
-        force_basic_auth: true
-        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-        method: GET
-        body_format: json
-        status_code: 200
-      register: new_cluster_tokens
-      when: new_cluster is not skipped
+#     - name: Get new cluster tokens
+#       ansible.builtin.uri:
+#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
+#         force_basic_auth: true
+#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+#         method: GET
+#         body_format: json
+#         status_code: 200
+#       register: new_cluster_tokens
+#       when: new_cluster is not skipped
   
-    - name: Debug new cluster tokens
-      ansible.builtin.debug:
-        msg: "{{ new_cluster_tokens.json.command }}"
-      when: new_cluster is not skipped
-  run_once: true
+#     - name: Debug new cluster tokens
+#       ansible.builtin.debug:
+#         msg: "{{ new_cluster_tokens.json.command }}"
+#       when: new_cluster is not skipped
+#   run_once: true
 
-- name: Register k3s in Rancher
-  become: true
-  ansible.builtin.command:
-    cmd: "{{ new_cluster_tokens.json.command }}"
-  when: 
-    - new_cluster is not skipped
-    - inventory_hostname in groups["k3s_master"]
+# - name: Register k3s in Rancher
+#   become: true
+#   ansible.builtin.command:
+#     cmd: "{{ new_cluster_tokens.json.command }}"
+#   when: 
+#     - new_cluster is not skipped
+#     - inventory_hostname in groups["k3s_master"]
