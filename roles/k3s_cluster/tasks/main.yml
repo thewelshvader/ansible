@@ -5,6 +5,7 @@
   register: install_result
   changed_when: "'installed' in install_result.stdout"
   delegate_to: localhost
+  run_once: true
 
 # - name: Disable UFW
 #   community.general.ufw:
