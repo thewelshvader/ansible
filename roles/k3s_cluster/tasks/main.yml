@@ -4,6 +4,7 @@
   shell: "ansible-galaxy collection install community.general"
   register: install_result
   changed_when: "'installed' in install_result.stdout"
+  delegate_to: localhost
 
 # - name: Disable UFW
 #   community.general.ufw:
