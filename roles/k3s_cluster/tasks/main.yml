@@ -1,6 +1,7 @@
 ---
 # tasks file for roles/k3s_cluster
 - name: Disable UFW
+  become: true
   community.general.ufw:
     state: disabled
 
