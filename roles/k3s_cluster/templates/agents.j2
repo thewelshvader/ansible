@@ -1,0 +1,4 @@
+server: "https://{{ groups.k3s_master[0] }}:6443"
+token: secret
+node-label:
+    - k3s=agent

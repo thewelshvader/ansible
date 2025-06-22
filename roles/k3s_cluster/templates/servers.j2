@@ -1,0 +1,5 @@
+write-kubeconfig-mode: "0644"
+token: secret
+server: "https://{{ groups.k3s_master[0] }}:6443"
+node-label:
+    - k3s=server
