@@ -1,0 +1,42 @@
+---
+# vars file for roles/k3s_cluster
+hosts_entries:
+  - "10.20.36.7	rancher.int.oqc.app"
+  - "10.20.6.18 oqcacr.azurecr.io"
+  - "10.20.6.17 oqcacr.uksouth.data.azurecr.io"
+
+coredns: |
+  .:53 {
+    errors
+    health
+    ready
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+      pods insecure
+      fallthrough in-addr.arpa ip6.arpa
+    }
+    hosts /etc/coredns/NodeHosts {
+      ttl 60
+      reload 15s
+      fallthrough
+    }
+    prometheus :9153
+    forward int.oqc.app 10.20.53.4
+    forward int.oqc.network 10.20.53.4
+    forward oqcacr.azurecr.io 10.20.53.4
+    forward privatelink.azurecr.io 10.20.53.4
+    forward oqcacr.uksouth.data.azurecr.io 10.20.53.4
+    forward privatelink.blob.core.windows.net 10.20.53.4
+    forward privatelink.japaneast.azmk8s.io 10.20.53.4
+    forward privatelink.mongo.cosmos.azure.com 10.20.53.4
+    forward privatelink.mysql.database.azure.com 10.20.53.4
+    forward privatelink.postgres.database.azure.com 10.20.53.4
+    forward privatelink.uksouth.azmk8s.io 10.20.53.4
+    forward privatelink.vaultcore.azure.net 10.20.53.4
+    forward . /etc/resolv.conf
+    cache 30
+    loop
+    reload
+    loadbalance
+    import /etc/coredns/custom/*.override
+  }
+  import /etc/coredns/custom/*.server
