@@ -5,9 +5,9 @@
   register: install_result
   changed_when: "'installed' in install_result.stdout"
 
-- name: Disable UFW
-  community.general.ufw:
-    state: disabled
+# - name: Disable UFW
+#   community.general.ufw:
+#     state: disabled
 
 # - name: Download k3s install script
 #   ansible.builtin.uri:
