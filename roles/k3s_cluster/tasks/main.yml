@@ -38,7 +38,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0644'
-  when: inventory_hostname in groups["k3s_master"]
+  when: inventory_hostname in groups["master"]
 
 - name: Template server config file
   become: true
@@ -48,7 +48,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0644'
-  when: inventory_hostname in groups["k3s_servers"]
+  when: inventory_hostname in groups["server"]
 
 # - name: Template agent config file
 #   ansible.builtin.template:
