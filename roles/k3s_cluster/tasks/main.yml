@@ -19,11 +19,15 @@
     path: /etc/rancher/k3s/
     state: directory
 
-- name: Debug hostnames
-  debug:
-    msg: "{{ hostvars[inventory_hostname] }}"
+- name: Fetch master node ip
+  ansible.builtin.set_fact:
+    master_ip: "{{ hostvars[inventory_hostname].ansible_host }}"
   delegate_to: groups.master[0]
   run_once: true
+
+- name: Debug ip
+  debug:
+    msg: "{{ master_ip }}"
 
 # - name: Copy k3s master config file
 #   ansible.builtin.copy:
