@@ -13,10 +13,10 @@
     owner: kevin
     group: kevin
 
-# - name: Created k3s config directory
-#   ansible.builtin.file:
-#     path: /etc/rancher/k3s/
-#     state: directory
+- name: Created k3s config directory
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/
+    state: directory
 
 # - name: Copy k3s master config file
 #   ansible.builtin.copy:
