@@ -14,6 +14,7 @@
     group: kevin
 
 - name: Created k3s config directory
+  become: true
   ansible.builtin.file:
     path: /etc/rancher/k3s/
     state: directory
