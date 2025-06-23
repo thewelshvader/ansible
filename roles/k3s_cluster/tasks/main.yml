@@ -28,24 +28,25 @@
 - name: Debug ip
   debug:
     msg: "{{ master_ip }}"
+  run_once: true
 
-# - name: Copy k3s master config file
-#   ansible.builtin.copy:
-#     src: master-config.yaml
-#     dest: /etc/rancher/k3s/config.yaml
-#     owner: ubuntu
-#     group: ubuntu
-#     mode: '0644'
-#   when: inventory_hostname in groups["k3s_master"]
+- name: Copy k3s master config file
+  ansible.builtin.copy:
+    src: master-config.yaml
+    dest: /etc/rancher/k3s/config.yaml
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+  when: inventory_hostname in groups["k3s_master"]
 
-# - name: Template server config file
-#   ansible.builtin.template:
-#     src: servers.j2
-#     dest: /etc/rancher/k3s/config.yaml
-#     owner: ubuntu
-#     group: ubuntu
-#     mode: '0644'
-#   when: inventory_hostname in groups["k3s_servers"]
+- name: Template server config file
+  ansible.builtin.template:
+    src: servers.j2
+    dest: /etc/rancher/k3s/config.yaml
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+  when: inventory_hostname in groups["k3s_servers"]
 
 # - name: Template agent config file
 #   ansible.builtin.template:
