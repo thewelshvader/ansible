@@ -31,6 +31,7 @@
   run_once: true
 
 - name: Copy k3s master config file
+  become: true
   ansible.builtin.copy:
     src: master-config.yaml
     dest: /etc/rancher/k3s/config.yaml
@@ -40,6 +41,7 @@
   when: inventory_hostname in groups["k3s_master"]
 
 - name: Template server config file
+  become: true
   ansible.builtin.template:
     src: servers.j2
     dest: /etc/rancher/k3s/config.yaml
