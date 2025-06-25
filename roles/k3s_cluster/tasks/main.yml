@@ -81,6 +81,7 @@
 #     groups: docker
 
 - name: Install K3s - master
+  become: true
   ansible.builtin.command:
     cmd: /home/kevin/install.sh
   environment:
@@ -88,6 +89,7 @@
   when: inventory_hostname in groups["master"]
 
 - name: Replace kubeconfig default IP to the instance internal IP
+  become: true
   ansible.builtin.replace:
     path: /etc/rancher/k3s/k3s.yaml
     regexp: ^[\s]+server:\shttps:\/\/127.0.0.1:6443$
@@ -102,6 +104,7 @@
 # #   when: inventory_hostname in groups["k3s_master"]
 
 - name: Install K3s - servers
+  become: true
   ansible.builtin.command:
     cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
   environment:
