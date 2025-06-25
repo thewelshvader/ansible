@@ -80,19 +80,19 @@
 #     name: ubuntu
 #     groups: docker
 
-# - name: Install K3s - master
-#   ansible.builtin.command:
-#     cmd: /home/ubuntu/install.sh
-#   environment:
-#     INSTALL_K3S_VERSION: "{{ k3s_version }}"
-#   when: inventory_hostname in groups["k3s_master"]
+- name: Install K3s - master
+  ansible.builtin.command:
+    cmd: /home/kevin/install.sh
+  environment:
+    INSTALL_K3S_VERSION: "{{ k3s_version }}"
+  when: inventory_hostname in groups["master"]
 
-# - name: Replace kubeconfig default IP to the instance internal IP
-#   ansible.builtin.replace:
-#     path: /etc/rancher/k3s/k3s.yaml
-#     regexp: ^[\s]+server:\shttps:\/\/127.0.0.1:6443$
-#     replace: "    server: https://{{ inventory_hostname }}:6443"
-#   when: inventory_hostname in groups["k3s_master"]
+- name: Replace kubeconfig default IP to the instance internal IP
+  ansible.builtin.replace:
+    path: /etc/rancher/k3s/k3s.yaml
+    regexp: ^[\s]+server:\shttps:\/\/127.0.0.1:6443$
+    replace: "    server: https://{{ master_ip }}:6443"
+  when: inventory_hostname in groups["master"]
 
 # # - name: Replace kubeconfig default IP to the instance internal IP
 # #   ansible.builtin.shell:
@@ -101,13 +101,13 @@
 # #       #sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"$(ip -4 address show ens3 | grep -o '10\.[0-9.]*' | head -1)"'\2/' /etc/rancher/k3s/k3s.yaml
 # #   when: inventory_hostname in groups["k3s_master"]
 
-# - name: Install K3s - servers
-#   ansible.builtin.command:
-#     cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
-#   environment:
-#     INSTALL_K3S_VERSION: "{{ k3s_version }}"
-#   changed_when: true
-#   when: inventory_hostname in groups["k3s_servers"]
+- name: Install K3s - servers
+  ansible.builtin.command:
+    cmd: /home/ubuntu/install.sh --kubelet-arg "--image-gc-high-threshold=10" --kubelet-arg "--image-gc-low-threshold=5"
+  environment:
+    INSTALL_K3S_VERSION: "{{ k3s_version }}"
+  changed_when: true
+  when: inventory_hostname in groups["server"]
 
 
 # - name: Install K3s - agents
