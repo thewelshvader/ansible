@@ -169,7 +169,7 @@
   block:
     - name: List current Rancher clusters
       ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_LOCAL_IP') }}/v3/clusters"
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
         force_basic_auth: true
         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
@@ -190,7 +190,7 @@
 
     - name: Create Rancher cluster
       ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_LOCAL_IP') }}/v3/clusters"
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
         force_basic_auth: true
         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
@@ -214,7 +214,7 @@
   
     - name: Get new cluster tokens
       ansible.builtin.uri:
-        url: "{{ lookup('ansible.builtin.env', 'RANCHER_LOCAL_IP') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
         force_basic_auth: true
         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
