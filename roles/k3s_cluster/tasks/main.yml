@@ -5,13 +5,13 @@
   community.general.ufw:
     state: disabled
 
-- name: Add dns entries
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    insertbefore: BOF
-    line: "{{ item }}"
-  loop: "{{ hosts_entries }}"
+# - name: Add dns entries
+#   become: true
+#   ansible.builtin.lineinfile:
+#     path: /etc/hosts
+#     insertbefore: BOF
+#     line: "{{ item }}"
+#   loop: "{{ hosts_entries }}"
 
 - name: Download k3s install script
   ansible.builtin.uri:
