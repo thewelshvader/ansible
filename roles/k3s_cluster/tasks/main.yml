@@ -104,13 +104,6 @@
     replace: "    server: https://{{ master_ip }}:6443"
   when: inventory_hostname in groups["master"]
 
-# # - name: Replace kubeconfig default IP to the instance internal IP
-# #   ansible.builtin.shell:
-# #     cmd: |
-# #       'sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"{{ inventory_hostname }}"'\2/' /etc/rancher/k3s/k3s.yaml'
-# #       #sed -i -r 's/(server: https:\/\/).*(:6443)/\1'"$(ip -4 address show ens3 | grep -o '10\.[0-9.]*' | head -1)"'\2/' /etc/rancher/k3s/k3s.yaml
-# #   when: inventory_hostname in groups["k3s_master"]
-
 - name: Install K3s - servers
   become: true
   ansible.builtin.command:
@@ -171,27 +164,27 @@
 #       loop: "{{ agent_hostnames }}"
 #   when: inventory_hostname in groups["k3s_master"]
 
-# - name: Configure Rancher
-#   delegate_to: localhost
-#   block:
-#     - name: List current Rancher clusters
-#       ansible.builtin.uri:
-#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
-#         force_basic_auth: true
-#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-#         method: GET
-#         body_format: json
-#         status_code: 200
-#       register: current_clusters
+- name: Configure Rancher
+  delegate_to: localhost
+  block:
+    - name: List current Rancher clusters
+      ansible.builtin.uri:
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
+        force_basic_auth: true
+        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+        method: GET
+        body_format: json
+        status_code: 200
+      register: current_clusters
     
-#     - name: Set fact
-#       ansible.builtin.set_fact:
-#         current_cluster_list: "{{ current_clusters.json.data | map(attribute='name') | list }}"
+    - name: Set fact
+      ansible.builtin.set_fact:
+        current_cluster_list: "{{ current_clusters.json.data | map(attribute='name') | list }}"
 
-#     - name: Debug cluster list
-#       ansible.builtin.debug:
-#         msg: "{{ current_cluster_list }}"
+    - name: Debug cluster list
+      ansible.builtin.debug:
+        msg: "{{ current_cluster_list }}"
 
 #     - name: Create Rancher cluster
 #       ansible.builtin.uri:
