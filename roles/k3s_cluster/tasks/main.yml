@@ -181,10 +181,12 @@
     - name: Set fact
       ansible.builtin.set_fact:
         current_cluster_list: "{{ current_clusters.json.data | map(attribute='name') | list }}"
+      run_once: true
 
     - name: Debug cluster list
       ansible.builtin.debug:
         msg: "{{ current_cluster_list }}"
+      run_once: true
 
 #     - name: Create Rancher cluster
 #       ansible.builtin.uri:
