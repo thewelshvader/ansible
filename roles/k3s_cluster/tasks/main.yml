@@ -188,52 +188,52 @@
         msg: "{{ current_cluster_list }}"
       run_once: true
 
-#     - name: Create Rancher cluster
-#       ansible.builtin.uri:
-#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
-#         force_basic_auth: true
-#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-#         method: POST
-#         body_format: json
-#         body:
-#           name: "{{ awx_inventory_name | lower }}"
-#         status_code: 201
-#       register: new_cluster
-#       when: awx_inventory_name|lower not in current_cluster_list
+    - name: Create Rancher cluster
+      ansible.builtin.uri:
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusters"
+        force_basic_auth: true
+        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+        method: POST
+        body_format: json
+        body:
+          name: "{{ awx_inventory_name | lower }}"
+        status_code: 201
+      register: new_cluster
+      when: awx_inventory_name|lower not in current_cluster_list
 
-#     - name: Debug new cluster id
-#       ansible.builtin.debug:
-#         msg: "New cluster id: {{ new_cluster.json.id }}"
-#       when: awx_inventory_name|lower not in current_cluster_list
+    - name: Debug new cluster id
+      ansible.builtin.debug:
+        msg: "New cluster id: {{ new_cluster.json.id }}"
+      when: awx_inventory_name|lower not in current_cluster_list
 
-#     - name: Pause for 1 minute
-#       ansible.builtin.pause:
-#         minutes: 1
-#       when: new_cluster is not skipped
+    - name: Pause for 1 minute
+      ansible.builtin.pause:
+        minutes: 1
+      when: new_cluster is not skipped
   
-#     - name: Get new cluster tokens
-#       ansible.builtin.uri:
-#         url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
-#         force_basic_auth: true
-#         url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
-#         url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
-#         method: GET
-#         body_format: json
-#         status_code: 200
-#       register: new_cluster_tokens
-#       when: new_cluster is not skipped
+    - name: Get new cluster tokens
+      ansible.builtin.uri:
+        url: "{{ lookup('ansible.builtin.env', 'RANCHER_API') }}/v3/clusterRegistrationTokens/{{ new_cluster.json.id }}:default-token"
+        force_basic_auth: true
+        url_username: "{{ lookup('ansible.builtin.env', 'RANCHER_ACCESS_KEY') }}"
+        url_password: "{{ lookup('ansible.builtin.env', 'RANCHER_SECRET_KEY') }}"
+        method: GET
+        body_format: json
+        status_code: 200
+      register: new_cluster_tokens
+      when: new_cluster is not skipped
   
-#     - name: Debug new cluster tokens
-#       ansible.builtin.debug:
-#         msg: "{{ new_cluster_tokens.json.command }}"
-#       when: new_cluster is not skipped
-#   run_once: true
+    - name: Debug new cluster tokens
+      ansible.builtin.debug:
+        msg: "{{ new_cluster_tokens.json.command }}"
+      when: new_cluster is not skipped
+  run_once: true
 
-# - name: Register k3s in Rancher
-#   become: true
-#   ansible.builtin.command:
-#     cmd: "{{ new_cluster_tokens.json.command }}"
-#   when: 
-#     - new_cluster is not skipped
-#     - inventory_hostname in groups["k3s_master"]
+- name: Register k3s in Rancher
+  become: true
+  ansible.builtin.command:
+    cmd: "{{ new_cluster_tokens.json.command }}"
+  when: 
+    - new_cluster is not skipped
+    - inventory_hostname in groups["k3s_master"]
