@@ -4,3 +4,5 @@ installs:
   - nano
   - open-iscsi
   - nfs-common
+
+longhorn_version: v1.9.0

@@ -7,3 +7,10 @@
     state: present
     update_cache: true
   loop: "{{ installs }}"
+
+- name: Install longhornctl
+  ansible.builtin.shell: |
+    rm -rf /usr/local/bin/longhornctl
+    curl -L https://github.com/longhorn/cli/releases/download/{{ longhorn_version }}/longhornctl-linux-arm64 -o longhornctl
+    chmod +x longhornctl
+    mv ./longhornctl /usr/local/bin/longhornctl
