@@ -1,2 +1,9 @@
 ---
 # tasks file for roles/pkg-mgmt
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop: "{{ installs }}"
