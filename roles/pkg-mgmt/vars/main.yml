@@ -1,2 +1,5 @@
 ---
 # vars file for roles/pkg-mgmt
+installs:
+  - nano
+  - open-iscsi
