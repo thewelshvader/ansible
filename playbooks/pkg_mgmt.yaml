@@ -1,0 +1,6 @@
+---
+- name: Manage apt packages
+  hosts: all
+  become: true
+  roles:
+    - roles/pkg-mgmt

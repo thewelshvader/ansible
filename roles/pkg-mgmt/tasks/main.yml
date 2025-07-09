@@ -1,0 +1,27 @@
+---
+# tasks file for roles/pkg-mgmt
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop: "{{ installs }}"
+
+- name: Start service iscsid
+  ansible.builtin.service:
+    name: iscsid
+    state: started
+    enabled: true
+
+- name: Add the dm-crypt module
+  community.general.modprobe:
+    name: dm-crypt
+    state: present
+
+- name: Install longhornctl
+  ansible.builtin.shell: |
+    rm -rf /usr/local/bin/longhornctl
+    curl -L https://github.com/longhorn/cli/releases/download/{{ longhorn_version }}/longhornctl-linux-amd64 -o longhornctl
+    chmod +x longhornctl
+    mv ./longhornctl /usr/local/bin/longhornctl
