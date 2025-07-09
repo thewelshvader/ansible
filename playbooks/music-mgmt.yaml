@@ -4,6 +4,7 @@
   become: true
   vars:
     holding: /home/kevin/music-holding
+    mount: /var/lib/kubelet/pods/8aae29ea-f65f-4b3e-b628-c5b4a2ea742f/volumes/kubernetes.io~csi/pvc-ad4662bd-db68-4581-8b17-7a441578b584/mount
   tasks:
     - name: Recursively find 
       ansible.builtin.find:
@@ -22,3 +23,8 @@
         path: "{{ item['path'] }}"
         state: absent
       loop: "{{ find_results['files'] }}"
+
+    - name: Copy to mount
+      ansible.builtin.copy:
+        src: "{{ holding }}"
+        dest: "{{ mount }}"
