@@ -1,0 +1,31 @@
+---
+- name: Deploy k3s cluster
+  hosts: all
+  become: true
+  vars:
+    holding: /home/kevin/music-holding
+    mount: /var/lib/kubelet/pods/8aae29ea-f65f-4b3e-b628-c5b4a2ea742f/volumes/kubernetes.io~csi/pvc-ad4662bd-db68-4581-8b17-7a441578b584/mount
+  tasks:
+    - name: Recursively find 
+      ansible.builtin.find:
+        paths: "{{ holding }}"
+        patterns: '*.DS_Store'
+        recurse: yes
+        hidden: true
+      register: find_results
+    
+    - name: Debug find results
+      ansible.builtin.debug:
+        msg: "{{ find_results }}"
+
+    - name: Remove matched files 
+      ansible.builtin.file:
+        path: "{{ item['path'] }}"
+        state: absent
+      loop: "{{ find_results['files'] }}"
+
+    - name: Copy to mount
+      ansible.builtin.copy:
+        src: "{{ holding }}"
+        dest: "{{ mount }}"
+        remote_src: true
