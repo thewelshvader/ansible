@@ -10,6 +10,7 @@
         paths: "{{ holding }}"
         patterns: '*.DS_Store'
         recurse: yes
+        hidden: true
       register: find_results
     
     - name: Debug find results
