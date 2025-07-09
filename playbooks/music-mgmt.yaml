@@ -16,3 +16,9 @@
     - name: Debug find results
       ansible.builtin.debug:
         msg: "{{ find_results }}"
+
+    - name: Remove matched files 
+      ansible.builtin.find:
+        path: "{{ item['path'] }}"
+        state: absent
+      loop: "{{ find_results['files'] }}"
