@@ -28,3 +28,4 @@
       ansible.builtin.copy:
         src: "{{ holding }}"
         dest: "{{ mount }}"
+        remote_src: true
