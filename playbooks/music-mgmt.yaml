@@ -10,3 +10,8 @@
         paths: "{{ holding }}"
         patterns: '*.DS_Store'
         recurse: yes
+      register: find_results
+    
+    - name: Debug find results
+      ansible.builtin.debug:
+        msg: "{{ find_results }}"
