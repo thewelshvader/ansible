@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  default.server: |
+    rancher.delaneyhq.com {
+        hosts {
+              192.168.0.44 rancher.delaneyhq.com
+              fallthrough
+        }
+    }
