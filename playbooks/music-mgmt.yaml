@@ -4,7 +4,7 @@
   become: true
   vars:
     holding: /home/kevin/music-holding
-    mount: /var/lib/kubelet/pods/41a86a76-307b-497f-8ff9-79cb024e2e2e/volumes/kubernetes.io~csi/pvc-58053bde-d8e5-456f-bef0-6262f8c14b43/mount
+    mount: /var/lib/kubelet/pods/00096d79-432f-41b9-aaa3-d196cc66b2cf/volumes/kubernetes.io~csi/pvc-58053bde-d8e5-456f-bef0-6262f8c14b43/mount
   tasks:
     - name: Recursively find 
       ansible.builtin.find:
